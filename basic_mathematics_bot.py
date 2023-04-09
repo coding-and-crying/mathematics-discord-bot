@@ -1,17 +1,35 @@
 import discord
 from decouple import config
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 
 
-client = discord.Client(intents=discord.Intents.default())
+@bot.event
+async def on_ready():
+    print('Bot is ready.')
 
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
-
-    async def on_message(self, message):
-        print('Message from {0.author}: {0.content}'.format(message))
+@bot.command()
+async def add(ctx, num1: int, num2: int):
+    await ctx.send(num1 + num2)
 
 
-client.run(
-    config('BOT_TOKEN'))
+@bot.command()
+async def subtract(ctx, num1: int, num2: int):
+    await ctx.send(num1 - num2)
+
+
+@bot.command()
+async def multiply(ctx, num1: int, num2: int):
+    await ctx.send(num1 * num2)
+
+
+@bot.command()
+async def divide(ctx, num1: int, num2: int):
+    await ctx.send(num1 / num2)
+
+
+bot.run(config('BOT_TOKEN'))
